@@ -7,11 +7,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="quizContainer">
-        <audio id="audioPlayer" controls></audio>
-        <div id="questionText">Listen to the snippet and choose the correct title:</div>
-        <div id="optionsContainer"></div>
-    </div>
+    <main>
+        <h1>Classical Music Quiz</h1>
+        <div id="startScreen">
+            <button id="startBtn" class="primary">Start Quiz</button>
+        </div>
+        <div id="quizContainer" class="hidden">
+            <audio id="audioPlayer" controls></audio>
+            <div id="progress"></div>
+            <div id="score"></div>
+            <div id="questionText">Listen and choose the correct title:</div>
+            <div id="optionsContainer"></div>
+            <button id="nextBtn" class="primary hidden">Next</button>
+        </div>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
