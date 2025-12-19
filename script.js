@@ -1,11 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
   const startBtn = document.getElementById('startBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const shareBtn = document.getElementById('shareBtn');
   const quizContainer = document.getElementById('quizContainer');
   const nextBtn = document.getElementById('nextBtn');
   const audioPlayer = document.getElementById('audioPlayer');
   const optionsContainer = document.getElementById('optionsContainer');
   const progressEl = document.getElementById('progress');
   const scoreEl = document.getElementById('score');
+  const resultScreen = document.getElementById('resultScreen');
+  const startScreen = document.getElementById('startScreen');
 
   const totalQuestions = 10;
   let score = 0;
@@ -13,7 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let quizFiles = [];
   let currentFile = '';
 
+  // Updated with 2025 trending classical pieces prioritized at the top
   const audioFiles = [
+    // 2025 Trending Contemporary Classics
+    '1928 Ravel - Bolero.mp3',  // Ravel 150th anniversary 2025
+    '1902 Mahler - Symphony No. 5 - Adagietto.mp3',
+    '1730 Albinoni , Adagio.mp3',
+    '1899 Sibelius - Finlandia.mp3',
+    '1698 Pachelbel , Canon in D.mp3',
+
+    // Classic favorites still trending
     '1731 Bach , Oboe Concerto in D minor, 2nd movement.mp3',
     '1778 Rondo Alla Turca, from Piano Sonata in A.mp3',
     '1928 Ravel - Bolero.mp3',
@@ -117,11 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   startBtn.addEventListener('click', startQuiz);
+  restartBtn.addEventListener('click', startQuiz);
   nextBtn.addEventListener('click', handleNext);
+  shareBtn.addEventListener('click', shareScore);
 
   function startQuiz() {
-    startBtn.parentElement.classList.add('hidden');
-    nextBtn.textContent = 'Next';
+    startScreen.classList.add('hidden');
+    resultScreen.classList.add('hidden');
     quizContainer.classList.remove('hidden');
     score = 0;
     questionIndex = 0;
@@ -141,11 +156,63 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleNext() {
     questionIndex++;
     if (questionIndex >= totalQuestions) {
-      startBtn.parentElement.classList.remove('hidden');
-      quizContainer.classList.add('hidden');
-      startBtn.textContent = 'Restart';
+      showResults();
     } else {
       nextQuestion();
+    }
+  }
+
+  function showResults() {
+    const percentage = Math.round((score / totalQuestions) * 100);
+    const progressFill = progressEl.querySelector('.progress-fill');
+    const progressText = progressEl.querySelector('.progress-text');
+    const finalScore = resultScreen.querySelector('.final-score');
+    const resultMessage = resultScreen.querySelector('.result-message');
+
+    progressFill.style.width = '100%';
+    progressText.textContent = 'Quiz Complete!';
+
+    finalScore.textContent = `${score}/${totalQuestions}`;
+
+    // Gen Z-friendly result messages
+    let message = '';
+    if (percentage === 100) {
+      message = 'Absolutely incredible! You\'re a classical music virtuoso. Your knowledge spans centuries of musical brilliance. 🎵';
+    } else if (percentage >= 80) {
+      message = 'Amazing vibes! You really know your classics. From baroque to romantic, you\'ve got the emotional depth. Keep exploring! ✨';
+    } else if (percentage >= 60) {
+      message = 'Great work! You\'re on a beautiful journey through classical music. Every piece tells a story - keep listening and discovering. 🎼';
+    } else if (percentage >= 40) {
+      message = 'Nice start! Classical music is all about the experience. Let the emotions guide you as you explore more masterpieces. 💫';
+    } else {
+      message = 'Every expert was once a beginner! Classical music offers endless emotional depth and mindfulness. Your journey starts here. 🌟';
+    }
+
+    resultMessage.textContent = message;
+    resultScreen.classList.remove('hidden');
+  }
+
+  function shareScore() {
+    const percentage = Math.round((score / totalQuestions) * 100);
+    const shareText = `I scored ${score}/${totalQuestions} (${percentage}%) on Vibes & Classics! 🎵 Test your classical music knowledge and discover emotional depth through timeless music.`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'Vibes & Classics Quiz',
+        text: shareText,
+        url: window.location.href
+      }).catch(err => console.log('Share cancelled'));
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(shareText + ' ' + window.location.href)
+        .then(() => {
+          const originalText = shareBtn.textContent;
+          shareBtn.textContent = '✓ Copied to Clipboard!';
+          setTimeout(() => {
+            shareBtn.textContent = originalText;
+          }, 2000);
+        })
+        .catch(err => console.error('Failed to copy:', err));
     }
   }
 
@@ -198,11 +265,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateScore() {
-    scoreEl.textContent = `Score: ${score}`;
+    scoreEl.textContent = `${score} 🎵`;
   }
 
   function updateProgress() {
-    progressEl.textContent = `Question ${questionIndex + 1} of ${totalQuestions}`;
+    const percentage = ((questionIndex + 1) / totalQuestions) * 100;
+    const progressFill = progressEl.querySelector('.progress-fill');
+    const progressText = progressEl.querySelector('.progress-text');
+
+    progressFill.style.width = `${percentage}%`;
+    progressText.textContent = `Question ${questionIndex + 1} of ${totalQuestions}`;
   }
 
   function shuffle(arr) {
