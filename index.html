@@ -3,23 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
     <title>Classical Music Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>🎵</text></svg>">
+    <meta name="description" content="Test your ear with famous classical music themes.">
+    <meta name="color-scheme" content="light dark">
 </head>
 <body>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">🌙</button>
     <main>
-        <h1>Classical Music Quiz</h1>
-        <div id="startScreen">
-            <button id="startBtn" class="primary">Start Quiz</button>
-        </div>
-        <div id="quizContainer" class="hidden">
-            <audio id="audioPlayer" controls></audio>
-            <div id="progress"></div>
-            <div id="score"></div>
-            <div id="questionText">Listen and choose the correct title:</div>
-            <div id="optionsContainer"></div>
-            <button id="nextBtn" class="primary hidden">Next</button>
-        </div>
+        <header class="header">
+            <h1>Classical Music Quiz</h1>
+            <p class="tagline">Listen to the excerpt and pick the correct title.</p>
+        </header>
+        <section id="startScreen" class="panel">
+            <button id="startBtn" class="primary large">Start Quiz</button>
+        </section>
+        <section id="quizContainer" class="hidden panel">
+            <div class="player-row">
+                <audio id="audioPlayer" controls></audio>
+            </div>
+            <div class="meta-row">
+                <div id="progress" class="badge" aria-live="polite"></div>
+                <div id="score" class="badge" aria-live="polite"></div>
+            </div>
+            <div id="questionText" class="question">Listen and choose the correct title:</div>
+            <div id="optionsContainer" class="options-grid" role="list"></div>
+            <button id="nextBtn" class="primary large hidden">Next</button>
+        </section>
+        <footer class="footer">
+            <span>Made with 🎻</span>
+        </footer>
     </main>
     <script src="script.js"></script>
 </body>
